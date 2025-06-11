@@ -1,39 +1,11 @@
-import React, { useState, useRef } from 'react';
+// main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import './index.css';
 
-function DigitalIDCard({ data, cardRef }) {
-  const defaultPhoto =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Flag_of_Ethiopia.svg/320px-Flag_of_Ethiopia.svg.png';
-
-  return (
-    <div ref={cardRef} className="max-w-md mx-auto mt-4 p-4 border shadow-lg bg-white rounded-xl text-sm">
-      <h2 className="text-xl font-bold text-center mb-4">Ethiopian Digital ID</h2>
-      <div className="flex items-center gap-4">
-        <img
-          src={data.photo ? URL.createObjectURL(data.photo) : defaultPhoto}
-          alt="ID"
-          className="w-24 h-24 object-cover border rounded"
-        />
-        <div>
-          <p><strong>Name:</strong> {data.fullName}</p>
-          <p><strong>DOB:</strong> {data.dob}</p>
-          <p><strong>Sex:</strong> {data.sex}</p>
-          <p><strong>ID No:</strong> {data.idNumber}</p>
-        </div>
-      </div>
-      <div className="mt-4">
-        <p><strong>Region:</strong> {data.region}</p>
-        <p><strong>Zone:</strong> {data.zone}</p>
-        <p><strong>Woreda:</strong> {data.woreda}</p>
-        <p><strong>City:</strong> {data.city}</p>
-        <p><strong>Phone:</strong> {data.phone}</p>
-        <p><strong>Nationality:</strong> {data.nationality}</p>
-      </div>
-    </div>
-  );
-}
-
-export default function App() {
+function App() {
   const [formData, setFormData] = useState({
     fullName: '',
     dob: '',
@@ -50,6 +22,9 @@ export default function App() {
 
   const [submitted, setSubmitted] = useState(false);
   const cardRef = useRef(null);
+
+  const defaultPhoto =
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Flag_of_Ethiopia.svg/320px-Flag_of_Ethiopia.svg.png';
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -77,7 +52,7 @@ export default function App() {
   return (
     <div className="p-4">
       {!submitted ? (
-        <form onSubmit={handleSubmit} className="grid gap-2 w-full max-w-md">
+        <form onSubmit={handleSubmit} className="grid gap-2 w-full max-w-md mx-auto">
           <input name="fullName" placeholder="Full Name" onChange={handleChange} required />
           <input name="dob" type="date" onChange={handleChange} required />
           <select name="sex" onChange={handleChange} required>
@@ -97,7 +72,30 @@ export default function App() {
         </form>
       ) : (
         <>
-          <DigitalIDCard data={formData} cardRef={cardRef} />
+          <div ref={cardRef} className="max-w-md mx-auto mt-4 p-4 border shadow-lg bg-white rounded-xl text-sm">
+            <h2 className="text-xl font-bold text-center mb-4">Ethiopian Digital ID</h2>
+            <div className="flex items-center gap-4">
+              <img
+                src={formData.photo ? URL.createObjectURL(formData.photo) : defaultPhoto}
+                alt="ID"
+                className="w-24 h-24 object-cover border rounded"
+              />
+              <div>
+                <p><strong>Name:</strong> {formData.fullName}</p>
+                <p><strong>DOB:</strong> {formData.dob}</p>
+                <p><strong>Sex:</strong> {formData.sex}</p>
+                <p><strong>ID No:</strong> {formData.idNumber}</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p><strong>Region:</strong> {formData.region}</p>
+              <p><strong>Zone:</strong> {formData.zone}</p>
+              <p><strong>Woreda:</strong> {formData.woreda}</p>
+              <p><strong>City:</strong> {formData.city}</p>
+              <p><strong>Phone:</strong> {formData.phone}</p>
+              <p><strong>Nationality:</strong> {formData.nationality}</p>
+            </div>
+          </div>
           <div className="text-center mt-4">
             <button onClick={handleDownload} className="px-4 py-2 bg-blue-600 text-white rounded">
               Download ID
@@ -108,3 +106,9 @@ export default function App() {
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
